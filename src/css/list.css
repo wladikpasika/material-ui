@@ -1,0 +1,26 @@
+.fa-times:before{color:red}
+.fa-edit:before {
+    content: "\f044";
+    margin:5px;
+    color: blueviolet;
+}
+.list-item ul li {
+    text-align: center,
+}
+li.select {background: #ff000082}
+li.unselect:hover {background: #0037ff1f}
+li.select .fas.fa-times.close {
+    display:none
+}
+/*.controls, .list-item {
+    text-align: center
+}*/
+.controls {
+    margin:5px
+}
+.controls input{
+    border: 1px solid;
+}
+.add-button{
+    margin: 10px;
+}
