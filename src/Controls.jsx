@@ -35,8 +35,7 @@ class Controls extends Component {
 
     return (
       <div className="controls">
-        <MuiThemeProvider><TextField hintText="Hint Text"/></MuiThemeProvider>
-        <MuiThemeProvider><RaisedButton label="Default" /></MuiThemeProvider>
+        
       </div>
     );
   }

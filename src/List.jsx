@@ -6,9 +6,9 @@ import {List, ListItem} from 'material-ui';
 import Dialog from './material-ui-components/dialogs/PromptDialog';
 
 import { withStyles } from 'material-ui/styles';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 
@@ -98,9 +98,8 @@ class ComponentList extends Component {
     </MuiThemeProvider>
 
      <MuiThemeProvider>
-       <FloatingActionButton variant="raised" color="primary" onClick = {this.handleClearState}>
-        <ContentAdd />
-      </FloatingActionButton>
+     <RaisedButton label="Cancel" primary={true}/>
+     <RaisedButton label="Delete" secondary={true}/>
       </MuiThemeProvider>
 </div>
     );
