@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import {FloatingActionButton} from 'material-ui';
-
-import Button from 'material-ui/Button';
-import AddIcon from '@material-ui/icons/Add';
-
-import { withStyles } from 'material-ui/styles';
-import Input from 'material-ui/Input';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Controls extends Component {
 
@@ -39,15 +35,8 @@ class Controls extends Component {
 
     return (
       <div className="controls">
-        <Input
-        placeholder="Enter task"
-        onChange={this.handleInput}
-        value={value}
-      />
-        <Button variant="fab" aria-label="add" className="add-button" onClick={this.handlePress} style={Style}>
-            <AddIcon />
-        </Button>
-        
+        <MuiThemeProvider><TextField hintText="Hint Text"/></MuiThemeProvider>
+        <MuiThemeProvider><RaisedButton label="Default" /></MuiThemeProvider>
       </div>
     );
   }

@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Controls from './Controls';
 import List from './List';
-import {Header, Footer} from './material-ui-components/layouts/'
+import Header from './Header'
+import Tolbar from './Tolbar'
 
 
 class Root extends Component {
@@ -49,9 +51,12 @@ class Root extends Component {
 
     return (
       <Fragment>
-        <Header/>
+        <MuiThemeProvider>
+          <Header title="ToDo List" />
+        </MuiThemeProvider>
+        <MuiThemeProvider><Tolbar/></MuiThemeProvider>
         <Controls
-          placeholder="Entr task"
+          placeholder="Enter task"
           onAdd={this.handleAddItem}
         />
         <List

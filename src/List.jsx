@@ -6,7 +6,10 @@ import {List, ListItem} from 'material-ui';
 import Dialog from './material-ui-components/dialogs/PromptDialog';
 
 import { withStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 
 
 
@@ -64,13 +67,14 @@ class ComponentList extends Component {
     return (
     <div className = "list-item">
     <Dialog 
-        openDialog = {this.state.openDialog}
+        open = {this.state.openDialog}
         handleCloseDialog = {this.handleCloseDialog}
         handleChangeValue = {this.handleChangeTask}
         defaultValue = {this.state.valueDialogFieldByDefault}
         />
 
-    <List>
+   <MuiThemeProvider> 
+     <List>
     {Object.keys(tasks).map((key, index) => {
       const value = tasks[key];
       const selectItem = this.state.selected.includes(key);
@@ -91,13 +95,13 @@ class ComponentList extends Component {
       );
       })}
     </List>
+    </MuiThemeProvider>
 
-    <Button variant="raised" color="primary" onClick = {this.handleClearState}>
-        Unselect
-      </Button>
-    <Button variant="raised" color="secondary" onClick = {() => this.props.onRemove(this.state.selected)}>
-        Delete Selected
-      </Button>
+     <MuiThemeProvider>
+       <FloatingActionButton variant="raised" color="primary" onClick = {this.handleClearState}>
+        <ContentAdd />
+      </FloatingActionButton>
+      </MuiThemeProvider>
 </div>
     );
   }
