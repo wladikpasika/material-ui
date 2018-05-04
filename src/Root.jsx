@@ -1,19 +1,32 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-import Controls from './Controls';
+
+
 import List from './List';
 import Header from './Header'
-import Tolbar from './Tolbar'
+import TolbarControls from './TolbarControls'
+import Dialog from './material-ui-components/dialogs/PromptDialog';
+import Alert from './material-ui-components/dialogs/AlertDialog';
+import Dialogs from './material-ui-components/dialogs/';
+
+
 
 
 class Root extends Component {
 
   state = {
-    tasks: {}
+    tasks: {},
+    dialog: false,
+    alert: false,
+    alertMessage: '',
+    valueDialogByDefault: '',
+    keyEditedTask: null,
   }
-  
+
   iterator = 0;
 
   handleAddItem = (value = '') => {
@@ -38,36 +51,105 @@ class Root extends Component {
   handleRemoveItem = (keys) => {
     const { tasks } = this.state;
     const newItems = Object.assign({}, tasks);
-    
+
     keys.forEach((removedKey) => {
-      newItems[removedKey]?delete newItems[removedKey]:false
+      newItems[removedKey]
+        ? delete newItems[removedKey]
+        : false
     });
 
     this.setState({ tasks: newItems });
   }
+////// prompt methods
+  handleCloseDialog = () => {
+    const newStateObject = {
+      valueDialogByDefault: '',
+      keyEditedTask: null,
+      dialog: false,
+    };
+    this.setState(newStateObject);
+  }
+  
+  handleChangeTask = (value) => {
+    const message = "Empty field, or You don`t edit task. If you want to delete task, put on \"Delete Icon\""
+
+    if(value&&value.trim()){
+      this.handleEditItem(this.state.keyEditedTask, value);
+    }
+    else {
+      this.handleAlert(message);
+    }
+  }
+
+  handleOpenDialog = (value, key) => {
+    const newStateObject = {
+      valueDialogByDefault: value,
+      keyEditedTask: key,
+      dialog: true,
+    };
+    this.setState(newStateObject);
+  }
+////// alert method
+  handleAlert = (message = "Undefined Error") => {
+    const newValue = {
+      alert: !this.state.alert,
+    };
+    
+    typeof(message)==='string'
+    ?newValue.alertMessage = message
+    :false
+
+    this.setState(newValue);
+  }
 
   render() {
-    const { tasks } = this.state;
+    const { tasks, dialog, alertMessage, alert, valueDialogByDefault, keyEditedTask} = this.state;
+    console.log(alert, 'Алерт');
+
+    const {Prompt, Alert} = Dialogs({
+      dialog,
+      alert,
+      valueDialogByDefault,
+      alertMessage,
+      handleCloseDialog: this.handleCloseDialog,
+      handleChangeTask: this.handleChangeTask, //or handleChangeValue !!  something one needed
+      handleAlert: this.handleAlert,
+    });
 
     return (
-      <Fragment>
-        <MuiThemeProvider>
-          <Header title="ToDo List" />
-        </MuiThemeProvider>
-        <MuiThemeProvider><Tolbar/></MuiThemeProvider>
-        <Controls
-          placeholder="Enter task"
-          onAdd={this.handleAddItem}
-        />
-        <List
-          tasks={tasks}
-          onEdit={this.handleEditItem}
-          onRemove={this.handleRemoveItem}
-        />
-      </Fragment>
+      <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+        <Fragment>
+          {Prompt} 
+          {Alert}
+          <Header
+            title="ToDo List"
+          />
+          <TolbarControls
+            onAdd={this.handleAddItem}
+            onAlert={this.handleAlert}
+          />
+          <List
+            tasks={tasks}
+            onRemove={this.handleRemoveItem}
+            onEdit={this.handleOpenDialog}
+            onAlert={this.handleAlert}
+          />
+        </Fragment>
+      </MuiThemeProvider>
     );
   }
 }
 
 export default Root;
 
+/*<Dialog
+              open={dialog}
+              handleCloseDialog={this.handleCloseDialog}
+              handleChangeValue={this.handleChangeTask}
+              defaultValue={valueDialogByDefault}
+            />
+            <Alert
+              open={alert}
+              handleAlert={this.handleAlert}
+              message={this.state.alertMessage}
+            /> */

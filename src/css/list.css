@@ -7,14 +7,13 @@
 .list-item ul li {
     text-align: center,
 }
-li.select {background: #ff000082}
-li.unselect:hover {background: #0037ff1f}
-li.select .fas.fa-times.close {
+
+.select {background: #ff000082 !important}
+.unselect:hover {background: #0037ff1f !important}
+.select .fas.fa-times.close {
     display:none
 }
-/*.controls, .list-item {
-    text-align: center
-}*/
+
 .controls {
     margin:5px
 }
@@ -22,5 +21,16 @@ li.select .fas.fa-times.close {
     border: 1px solid;
 }
 .add-button{
-    margin: 10px;
+    margin-left: 10px;
+}
+.control-buton{
+    margin-left: 5px;
+}
+.list-btn-wrp {
+    display: flex;
+    justify-content: space-between;
+    
+}
+.app-bar button {
+    display:none !important;
 }
