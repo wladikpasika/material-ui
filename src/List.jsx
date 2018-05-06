@@ -7,7 +7,6 @@ import { withStyles } from 'material-ui/styles';
 import Checkbox from 'material-ui/Checkbox';
 import FontIcon from 'material-ui/FontIcon';
 
-import Icon from './icon'
 
 import listStyles from './css/list.css';
 
@@ -63,6 +62,11 @@ class ComponentList extends Component {
   render() {
     const { tasks = {} } = this.props;
     const { selected } = this.state;
+    const verticalAlign = {
+        width: "auto",
+        display: "table-cell",
+        verticalAlign: "middle"
+    }
 
     return (
       <div className="list-item">
@@ -74,19 +78,31 @@ class ComponentList extends Component {
             return (
               <ListItem key={index} className={selectItem ? 'select' : 'unselect'}>
               
-          
                   <Checkbox
-                  value={index} 
-                  onCheck={() => this.handleChahgeCheckbox(key)}
-                  label = {
-                    <Fragment>
-                        {value}
-              
-                        <i className="far fa-edit edit" onClick={() => this.handleEditTask(value, key)}></i>
-                        <i className="fas fa-times close" onClick={() => !selectItem ? this.handleRemove(key) : false}></i>
-                    </Fragment>
-                  }
-                />    
+                  value={index}
+                  checked = {selectItem} 
+                  onCheck = {() => {
+                    this.handleChahgeCheckbox(key);
+                  }}
+                  style = {verticalAlign}
+                />   
+                  <span className="checkbox-content" style={verticalAlign}>
+                  {value}
+                  </span>
+                  <FontIcon
+                  className = "far fa-edit edit"
+                  style = {verticalAlign}
+                  onClick = {()=>{
+                    this.handleEditTask(value, key)
+                    this.setState({valueDialogFieldByDefault:value});
+                    this.setState({keyEditedTask: key});
+                  }}
+                  />
+                  <FontIcon
+                  className = "fas fa-times close"
+                  style = {verticalAlign}
+                  onClick = {() => !selectItem?this.handleRemove(key):false}
+                  />
               </ListItem>
             );
           })}
