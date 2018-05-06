@@ -141,14 +141,14 @@ class Root extends Component {
           <Header
             title="ToDo List"
           />
-          <Controls
-            onDialog={this.handleAddDialogCall}
-          />
           <List
             tasks={tasks}
             onRemove={this.handleRemoveItem}
             onEdit={this.handleOpenDialog}
             onAlert={this.handleAlert}
+          />
+           <Controls
+            onDialog={this.handleAddDialogCall}
           />
         </Fragment>
       </MuiThemeProvider>
