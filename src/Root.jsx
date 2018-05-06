@@ -4,17 +4,10 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-
-
 import List from './List';
 import Header from './Header'
-import TolbarControls from './TolbarControls'
-import Dialog from './material-ui-components/dialogs/PromptDialog';
-import Alert from './material-ui-components/dialogs/AlertDialog';
+import Controls from './Controls'
 import Dialogs from './material-ui-components/dialogs/';
-
-
-
 
 class Root extends Component {
 
@@ -23,8 +16,10 @@ class Root extends Component {
     dialog: false,
     alert: false,
     alertMessage: '',
+    promptMessage: '',
     valueDialogByDefault: '',
     keyEditedTask: null,
+    isAddPrompt: false,
   }
 
   iterator = 0;
@@ -66,26 +61,40 @@ class Root extends Component {
       valueDialogByDefault: '',
       keyEditedTask: null,
       dialog: false,
+      promptMessage:'',
     };
     this.setState(newStateObject);
   }
   
-  handleChangeTask = (value) => {
-    const message = "Empty field, or You don`t edit task. If you want to delete task, put on \"Delete Icon\""
+  handleTask = (value) => {
+    const messageEditAlert = "Empty field, or You don`t edit task. If you want to delete task, put on \"Delete Icon\""
+    const messageAddAlert = "Empty field, Put at least one character"
 
-    if(value&&value.trim()){
-      this.handleEditItem(this.state.keyEditedTask, value);
-    }
+    if(!this.state.isAddPrompt){
+      if(value&&value.trim()){
+        this.handleEditItem(this.state.keyEditedTask, value);
+      }
+      else {
+        this.handleAlert(messageEditAlert);
+      }
+    } 
     else {
-      this.handleAlert(message);
+      if(value&&value.trim()){
+        this.handleAddItem(value);
+      }
+      else {
+        this.handleAlert(messageAddAlert);
+      }
+      this.setState({isAddPrompt:false});
     }
   }
-
+  
   handleOpenDialog = (value, key) => {
     const newStateObject = {
       valueDialogByDefault: value,
       keyEditedTask: key,
       dialog: true,
+      promptMessage:"Edit Task"
     };
     this.setState(newStateObject);
   }
@@ -101,10 +110,17 @@ class Root extends Component {
 
     this.setState(newValue);
   }
+  handleAddDialogCall = () => {
+    const newState = {...this.state};
+    newState.dialog = !newState.dialog;
+    newState.promptMessage = newState.dialog?"Add Your Task":""
+    newState.isAddPrompt = true;
+
+    this.setState(newState);
+  }
 
   render() {
-    const { tasks, dialog, alertMessage, alert, valueDialogByDefault, keyEditedTask} = this.state;
-    console.log(alert, 'Алерт');
+    const { tasks, dialog, alertMessage, alert, valueDialogByDefault, keyEditedTask, promptMessage} = this.state;
 
     const {Prompt, Alert} = Dialogs({
       dialog,
@@ -112,8 +128,9 @@ class Root extends Component {
       valueDialogByDefault,
       alertMessage,
       handleCloseDialog: this.handleCloseDialog,
-      handleChangeTask: this.handleChangeTask, //or handleChangeValue !!  something one needed
+      handleChangeTask: this.handleTask, //or handleChangeValue !!  something one needed
       handleAlert: this.handleAlert,
+      promptMessage: promptMessage,
     });
 
     return (
@@ -124,9 +141,8 @@ class Root extends Component {
           <Header
             title="ToDo List"
           />
-          <TolbarControls
-            onAdd={this.handleAddItem}
-            onAlert={this.handleAlert}
+          <Controls
+            onDialog={this.handleAddDialogCall}
           />
           <List
             tasks={tasks}
@@ -141,15 +157,3 @@ class Root extends Component {
 }
 
 export default Root;
-
-/*<Dialog
-              open={dialog}
-              handleCloseDialog={this.handleCloseDialog}
-              handleChangeValue={this.handleChangeTask}
-              defaultValue={valueDialogByDefault}
-            />
-            <Alert
-              open={alert}
-              handleAlert={this.handleAlert}
-              message={this.state.alertMessage}
-            /> */

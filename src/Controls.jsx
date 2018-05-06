@@ -1,18 +1,16 @@
-import React from 'react';
+import React, {Fragment, Component} from 'react';
 
-import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
-import Alert from './material-ui-components/dialogs/AlertDialog'
 
-export default class ToolbarExamplesSimple extends React.Component {
+import Dialogs from './material-ui-components/dialogs/';
 
-    state = {
-        value: '',
-      }
-    
+
+export default class Controls extends Component {
+
+
       handleInput = (event) => {
         const { value = '' } = event.target;
         this.setState({ value });
@@ -30,13 +28,33 @@ export default class ToolbarExamplesSimple extends React.Component {
         }
       }
 
+      
       render() {
           const Style = {
               padding:'0 24px'
           }
-          const { value } = this.state;
+          
 
     return (
+      <Fragment>
+        <FloatingActionButton 
+                variant="raised" 
+                color="primary" 
+                style={
+                  {marginLeft:'10px'}
+                }
+                className="add-button" 
+                onClick = {
+                  () => { 
+                    this.props.onDialog();
+                }} 
+            >
+                <ContentAdd />
+            </FloatingActionButton>
+        </Fragment>
+    );
+
+    /*return (
       <Toolbar>
         
         <ToolbarGroup firstChild={true} 
@@ -67,6 +85,6 @@ export default class ToolbarExamplesSimple extends React.Component {
             </FloatingActionButton>
         </ToolbarGroup>
       </Toolbar>
-    );
+    );*/
   }
 }

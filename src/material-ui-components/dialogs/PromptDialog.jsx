@@ -9,18 +9,19 @@ export default class DialogComponent extends Component {
 
   state = {
     value: '',
-    edit: false,
   }
 
   render() {
     const { value } = this.state;
-    const { open, defaultValue } = this.props;
+    const { open, defaultValue, promptMessage } = this.props;
 
     const actions = [
       <FlatButton
         label="Cancel"
         primary={true}
-        onClick={this.props.handleCloseDialog}
+        onClick={()=>{
+          this.props.handleCloseDialog();
+        }}
       />,
       <FlatButton
         label="Submit"
@@ -28,7 +29,10 @@ export default class DialogComponent extends Component {
         keyboardFocused={true}
         onClick={() => {
           this.props.handleCloseDialog();
-          this.props.handleChangeValue(value);
+          this.props.handleChangeTask?this.props.handleChangeTask(value):false;
+          const newState = {...this.state};
+            newState.value = '';
+            this.setState(newState);
         }}
       />
     ];
@@ -38,17 +42,18 @@ export default class DialogComponent extends Component {
         open={open}
         aria-labelledby="form-dialog-title"
         actions={actions}
-        title="Edit your Task"
+        title={ promptMessage }
         modal={ false }
         onRequestClose={ this.props.handleCloseDialog }
       >
         <TextField
-          hintText="Edit your task"
-          defaultValue={ defaultValue }
+          hintText="Your Task"
+          defaultValue={ defaultValue?defaultValue:'' }
           onChange={ event => {
             event.persist();
-            this.setState({ edit: true });
-            this.setState({ value: event.target.value })
+            const newState = {...this.state};
+            newState.value = event.target.value;
+            this.setState(newState);
           }}
         />
       </Dialog>
