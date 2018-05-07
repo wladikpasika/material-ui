@@ -36,7 +36,13 @@ export default class Controls extends Component {
           
 
     return (
-      <Fragment>
+      <div className="btn-wrp" style={
+          {
+            position:"absolute",
+            bottom:"40px",
+            right:"40px"
+          }
+        }>
         <FloatingActionButton 
                 variant="raised" 
                 color="primary" 
@@ -51,7 +57,7 @@ export default class Controls extends Component {
             >
                 <ContentAdd />
             </FloatingActionButton>
-        </Fragment>
+        </div>
     );
 
     /*return (
