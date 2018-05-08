@@ -31,6 +31,13 @@ export default class DialogComponent extends Component {
     return this.setState({ value: '' });
   }
 
+
+  componentWillReceiveProps(nextProps) {
+   if (nextProps.open && nextProps.defaultValue) {
+      this.setState({ value: nextProps.defaultValue });
+    }
+  }
+
   render() {
     const { value } = this.state;
     const { open, defaultValue } = this.props;
@@ -64,7 +71,7 @@ export default class DialogComponent extends Component {
         <TextField
           autoFocus
           hintText="Your Task"
-          value={ this.value }
+          value={value}
           fullWidth
           onChange={ this.handleInputChange }
         />

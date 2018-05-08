@@ -47,21 +47,21 @@ class Root extends PureComponent {
   handleRemoveItems = (keys) => {
     const { tasks } = this.state;
     const newItems = Object.assign({}, tasks);
-      keys.forEach((removedKey) => {
-        newItems[removedKey]
-          ? delete newItems[removedKey]
-          : false
-      });
-      this.setState({ tasks: newItems });
+    keys.forEach((removedKey) => {
+      newItems[removedKey]
+        ? delete newItems[removedKey]
+        : false
+    });
+    this.setState({ tasks: newItems });
   }
   handleRemoveItem = () => {
-    const { tasks,taskTodelete } = this.state;
-    const newItems = {...tasks};
+    const { tasks, taskTodelete } = this.state;
+    const newItems = { ...tasks };
     delete newItems[taskTodelete];
-    this.setState({ 
+    this.setState({
       tasks: newItems,
       taskTodelete: null
-     });
+    });
 
   }
   handleCloseDialogAdd = () => {
@@ -81,17 +81,17 @@ class Root extends PureComponent {
   handleAddTask = (value) => {
     const messageAddAlert = "Empty field, Put at least one character"
 
-    if(value&&value.trim()){
+    if (value && value.trim()) {
       this.handleAddItem(value);
     }
     else {
       this.handleAlert(messageAddAlert);
     }
-    this.setState({isAddPrompt:false});
+    this.setState({ isAddPrompt: false });
   }
   handleEditTask = (value) => {
     const messageEditAlert = "Empty field, or You don`t edit task. If you want to delete task, put on \"Delete Icon\""
-    if(value&&value.trim()){
+    if (value && value.trim()) {
       this.handleEditItem(this.state.keyEditedTask, value);
     }
     else {
@@ -102,16 +102,16 @@ class Root extends PureComponent {
     const newValue = {
       alert: !this.state.alert,
     };
-    
-    typeof(message)==='string'
-    ?newValue.alertMessage = message
-    :false
+
+    typeof (message) === 'string'
+      ? newValue.alertMessage = message
+      : false
     this.setState(newValue);
   }
   handleAddDialogCall = () => {
     this.setState({
       dialogAdd: !this.state.dialogAdd,
-      promptMessage: this.state.dialogAdd?"Add Your Task":"",
+      promptMessage: this.state.dialogAdd ? "Add Your Task" : "",
       isAddPrompt: true
     });
   }
@@ -120,44 +120,44 @@ class Root extends PureComponent {
       valueDialogByDefault: value,
       keyEditedTask: key,
       dialogEdit: true,
-      promptMessage:"Edit Task"
+      promptMessage: "Edit Task"
     });
-    console.log(this.state, "Edit"); 
+    console.log(this.state, "Edit");
   }
   handleAlertConfirm = (key) => {
-    if(key){
-      this.setState({taskTodelete: key})
+    if (key) {
+      this.setState({ taskTodelete: key })
     }
     else {
-      this.setState({taskTodelete: null})
+      this.setState({ taskTodelete: null })
     }
     return this.setState({
       alertConfirm: !this.state.alertConfirm,
     }
-  );
+    );
   }
   allowDeletePermission = () => {
-      this.handleRemoveItem();
-      this.handleAlertConfirm();
+    this.handleRemoveItem();
+    this.handleAlertConfirm();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const cashedTasks = storageCheck();
 
-    if(cashedTasks){
-      this.setState({tasks: cashedTasks});      
+    if (cashedTasks) {
+      this.setState({ tasks: cashedTasks });
     }
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.tasks !== this.state.tasks) {
-        handleStorage(this.state.tasks);
-      };
-    }
-  
+      handleStorage(this.state.tasks);
+    };
+  }
+
   render() {
     const { tasks, dialogAdd, alertConfirm, dialogEdit, alertMessage, alert, valueDialogByDefault, keyEditedTask } = this.state;
 
-    const {PromptAdd, PromptEdit, Alert, AlertConfirm} = Dialogs({
+    const { PromptAdd, PromptEdit, Alert, AlertConfirm } = Dialogs({
       dialogAdd,
       dialogEdit,
       alert,
@@ -177,7 +177,7 @@ class Root extends PureComponent {
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
         <Fragment>
           {PromptAdd}
-          {PromptEdit}  
+          {PromptEdit}
           {Alert}
           {AlertConfirm}
           <Header
@@ -190,7 +190,7 @@ class Root extends PureComponent {
             onAlert={this.handleAlert}
             onAlertConfirm={this.handleAlertConfirm}
           />
-           <Controls
+          <Controls
             onDialog={this.handleAddDialogCall}
           />
         </Fragment>
