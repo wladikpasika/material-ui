@@ -8,32 +8,43 @@ import Dialog from 'material-ui/Dialog';
 export default class DialogComponent extends Component {
 
   state = {
-    value: '',
+    value: ''
   }
+
+  handleAddItem = () => {
+    this.props.handleCloseDialogAdd();
+    this.props.handleAddTask(this.state.value);
+    this.handleClearState()
+  }
+
+  handleInputChange = (event) => {
+    const { value = '' } = event.target;
+    this.setState({ value });
+  }
+
+  handleClearState = () => {
+    return this.setState({ value: '' });
+  }
+
 
   render() {
     const { value } = this.state;
-    const { open, defaultValue, promptMessage } = this.props;
-
+    const { open } = this.props;
+   
     const actions = [
       <FlatButton
         label="Cancel"
         primary={true}
-        onClick={()=>{
-          this.props.handleCloseDialog();
+        onClick={() => {
+          this.handleClearState();
+          this.props.handleCloseDialogAdd();
         }}
       />,
       <FlatButton
         label="Submit"
         primary={true}
-        keyboardFocused={true}
-        onClick={() => {
-          this.props.handleCloseDialog();
-          this.props.handleChangeTask?this.props.handleChangeTask(value):false;
-          const newState = {...this.state};
-            newState.value = '';
-            this.setState(newState);
-        }}
+        keyboardFocused={false}
+        onClick={this.handleAddItem}
       />
     ];
 
@@ -42,19 +53,15 @@ export default class DialogComponent extends Component {
         open={open}
         aria-labelledby="form-dialog-title"
         actions={actions}
-        title={ promptMessage }
-        modal={ false }
-        onRequestClose={ this.props.handleCloseDialog }
+        title="Add new Task"
+        modal={false}
+        onRequestClose={this.props.handleCloseDialogAdd}
       >
         <TextField
+          autoFocus
           hintText="Your Task"
-          defaultValue={ defaultValue?defaultValue:'' }
-          onChange={ event => {
-            event.persist();
-            const newState = {...this.state};
-            newState.value = event.target.value;
-            this.setState(newState);
-          }}
+          fullWidth
+          onChange={this.handleInputChange}
         />
       </Dialog>
     )

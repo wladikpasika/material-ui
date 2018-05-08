@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -8,20 +8,23 @@ import List from './List';
 import Header from './Header'
 import Controls from './Controls'
 import Dialogs from './material-ui-components/dialogs/';
+import Test from './material-ui-components/dialogs/AlertDeleteConfirm'
+import handleStorage from './LocalStorage/storageUpdate'
+import storageCheck from './LocalStorage/storageCheck'
 
-class Root extends Component {
+class Root extends PureComponent {
 
   state = {
     tasks: {},
-    dialog: false,
+    dialogAdd: false,
+    dialogEdit: false,
     alert: false,
+    alertConfirm: false,
     alertMessage: '',
-    promptMessage: '',
     valueDialogByDefault: '',
     keyEditedTask: null,
-    isAddPrompt: false,
+    taskTodelete: null
   }
-
   iterator = 0;
 
   handleAddItem = (value = '') => {
@@ -34,7 +37,6 @@ class Root extends Component {
       }
     });
   }
-
   handleEditItem = (key, newValue) => {
     const { tasks } = this.state;
     const newItems = Object.assign({}, tasks);
@@ -42,63 +44,60 @@ class Root extends Component {
 
     this.setState({ tasks: newItems });
   }
-
-  handleRemoveItem = (keys) => {
+  handleRemoveItems = (keys) => {
     const { tasks } = this.state;
     const newItems = Object.assign({}, tasks);
-
-    keys.forEach((removedKey) => {
-      newItems[removedKey]
-        ? delete newItems[removedKey]
-        : false
-    });
-
-    this.setState({ tasks: newItems });
+      keys.forEach((removedKey) => {
+        newItems[removedKey]
+          ? delete newItems[removedKey]
+          : false
+      });
+      this.setState({ tasks: newItems });
   }
-////// prompt methods
-  handleCloseDialog = () => {
+  handleRemoveItem = () => {
+    const { tasks,taskTodelete } = this.state;
+    const newItems = {...tasks};
+    delete newItems[taskTodelete];
+    this.setState({ 
+      tasks: newItems,
+      taskTodelete: null
+     });
+
+  }
+  handleCloseDialogAdd = () => {
+    const newStateObject = {
+      dialogAdd: false,
+    };
+    this.setState(newStateObject);
+  }
+  handleCloseDialogEdit = () => {
     const newStateObject = {
       valueDialogByDefault: '',
       keyEditedTask: null,
-      dialog: false,
-      promptMessage:'',
+      dialogEdit: false,
     };
     this.setState(newStateObject);
   }
-  
-  handleTask = (value) => {
-    const messageEditAlert = "Empty field, or You don`t edit task. If you want to delete task, put on \"Delete Icon\""
+  handleAddTask = (value) => {
     const messageAddAlert = "Empty field, Put at least one character"
 
-    if(!this.state.isAddPrompt){
-      if(value&&value.trim()){
-        this.handleEditItem(this.state.keyEditedTask, value);
-      }
-      else {
-        this.handleAlert(messageEditAlert);
-      }
-    } 
+    if(value&&value.trim()){
+      this.handleAddItem(value);
+    }
     else {
-      if(value&&value.trim()){
-        this.handleAddItem(value);
-      }
-      else {
-        this.handleAlert(messageAddAlert);
-      }
-      this.setState({isAddPrompt:false});
+      this.handleAlert(messageAddAlert);
+    }
+    this.setState({isAddPrompt:false});
+  }
+  handleEditTask = (value) => {
+    const messageEditAlert = "Empty field, or You don`t edit task. If you want to delete task, put on \"Delete Icon\""
+    if(value&&value.trim()){
+      this.handleEditItem(this.state.keyEditedTask, value);
+    }
+    else {
+      this.handleAlert(messageEditAlert);
     }
   }
-  
-  handleOpenDialog = (value, key) => {
-    const newStateObject = {
-      valueDialogByDefault: value,
-      keyEditedTask: key,
-      dialog: true,
-      promptMessage:"Edit Task"
-    };
-    this.setState(newStateObject);
-  }
-////// alert method
   handleAlert = (message = "Undefined Error") => {
     const newValue = {
       alert: !this.state.alert,
@@ -107,45 +106,89 @@ class Root extends Component {
     typeof(message)==='string'
     ?newValue.alertMessage = message
     :false
-
     this.setState(newValue);
   }
   handleAddDialogCall = () => {
-    const newState = {...this.state};
-    newState.dialog = !newState.dialog;
-    newState.promptMessage = newState.dialog?"Add Your Task":""
-    newState.isAddPrompt = true;
-
-    this.setState(newState);
+    this.setState({
+      dialogAdd: !this.state.dialogAdd,
+      promptMessage: this.state.dialogAdd?"Add Your Task":"",
+      isAddPrompt: true
+    });
+  }
+  handleEditDialogCall = (value, key) => {
+    this.setState({
+      valueDialogByDefault: value,
+      keyEditedTask: key,
+      dialogEdit: true,
+      promptMessage:"Edit Task"
+    });
+    console.log(this.state, "Edit"); 
+  }
+  handleAlertConfirm = (key) => {
+    if(key){
+      this.setState({taskTodelete: key})
+    }
+    else {
+      this.setState({taskTodelete: null})
+    }
+    return this.setState({
+      alertConfirm: !this.state.alertConfirm,
+    }
+  );
+  }
+  allowDeletePermission = () => {
+      this.handleRemoveItem();
+      this.handleAlertConfirm();
   }
 
-  render() {
-    const { tasks, dialog, alertMessage, alert, valueDialogByDefault, keyEditedTask, promptMessage} = this.state;
+  componentDidMount(){
+    const cashedTasks = storageCheck();
 
-    const {Prompt, Alert} = Dialogs({
-      dialog,
+    if(cashedTasks){
+      this.setState({tasks: cashedTasks});      
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.tasks !== this.state.tasks) {
+        handleStorage(this.state.tasks);
+      };
+    }
+  
+  render() {
+    const { tasks, dialogAdd, alertConfirm, dialogEdit, alertMessage, alert, valueDialogByDefault, keyEditedTask } = this.state;
+
+    const {PromptAdd, PromptEdit, Alert, AlertConfirm} = Dialogs({
+      dialogAdd,
+      dialogEdit,
       alert,
       valueDialogByDefault,
       alertMessage,
-      handleCloseDialog: this.handleCloseDialog,
-      handleChangeTask: this.handleTask, //or handleChangeValue !!  something one needed
+      handleCloseDialogAdd: this.handleCloseDialogAdd,
+      handleCloseDialogEdit: this.handleCloseDialogEdit,
+      handleAddTask: this.handleAddTask,
+      handleEditTask: this.handleEditTask, //or handleChangeValue !!  something one needed
       handleAlert: this.handleAlert,
-      promptMessage: promptMessage,
+      alertConfirm,
+      handleAlertConfirm: this.handleAlertConfirm,
+      allowDeletePermission: this.allowDeletePermission,
     });
 
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
         <Fragment>
-          {Prompt} 
+          {PromptAdd}
+          {PromptEdit}  
           {Alert}
+          {AlertConfirm}
           <Header
             title="ToDo List"
           />
           <List
             tasks={tasks}
-            onRemove={this.handleRemoveItem}
-            onEdit={this.handleOpenDialog}
+            onRemove={this.handleRemoveItems}
+            onEdit={this.handleEditDialogCall}
             onAlert={this.handleAlert}
+            onAlertConfirm={this.handleAlertConfirm}
           />
            <Controls
             onDialog={this.handleAddDialogCall}

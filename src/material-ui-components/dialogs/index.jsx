@@ -1,30 +1,42 @@
 import React from 'react';
-import PromptDialog from './PromptDialog';
+import PromptDialogAdd from './PromptDialogAdd';
+import PromptDialogEdit from './PromptDialogEdit';
 import AlertDialog from './AlertDialog';
+import AlertDeleteConfirm from './AlertDeleteConfirm'
 
 
 export default function controls (argObj) {
 
-    let Prompt; 
-       
-        Prompt = <PromptDialog
-        open={argObj.dialog}
-        handleCloseDialog={argObj.handleCloseDialog}
-        handleChangeTask={argObj.handleChangeTask}
+    const PromptAdd = <PromptDialogAdd
+        open={argObj.dialogAdd}
+        handleCloseDialogAdd={argObj.handleCloseDialogAdd}
+        handleAddTask={argObj.handleAddTask} 
+        />
+
+    const PromptEdit = <PromptDialogEdit
+        open={argObj.dialogEdit}
+        handleCloseDialogEdit={argObj.handleCloseDialogEdit}
+        handleEditTask={argObj.handleEditTask}
         defaultValue={argObj.valueDialogByDefault}
-        promptMessage={argObj.promptMessage} 
         />
         
-    let Alert;
-        
-        Alert = <AlertDialog
+    const Alert = <AlertDialog
         open={argObj.alert}
         handleAlert={argObj.handleAlert}
         message={argObj.alertMessage}
+        
   />
+
+    const AlertConfirm = <AlertDeleteConfirm
+          open={argObj.alertConfirm}
+          handleAlert={argObj.handleAlertConfirm}
+          allowDeletePermission={argObj.allowDeletePermission} 
+    />
     
     return {
-        Prompt,
-        Alert
+        PromptAdd,
+        PromptEdit,
+        Alert,
+        AlertConfirm,
     }
 }

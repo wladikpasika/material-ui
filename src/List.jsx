@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { List, ListItem } from 'material-ui';
 import Radium from 'radium';
@@ -6,7 +6,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { withStyles } from 'material-ui/styles';
 import Checkbox from 'material-ui/Checkbox';
 import FontIcon from 'material-ui/FontIcon';
-
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import listStyles from './css/list.css';
 
@@ -25,7 +28,7 @@ const ControlsButtons = (props) => {
   )
 }
 
-class ComponentList extends Component {
+class ComponentList extends PureComponent {
 
   state = {
     selected: [],
@@ -52,9 +55,9 @@ class ComponentList extends Component {
   }
 
   handleEditTask = (value, key) => {
-    
-    if(value&&value.trim()){
-      this.props.onEdit( value, key );
+
+    if (value && value.trim()) {
+      this.props.onEdit(value, key);
     }
   }
 
@@ -63,9 +66,9 @@ class ComponentList extends Component {
     const { tasks = {} } = this.props;
     const { selected } = this.state;
     const verticalAlign = {
-        width: "auto",
-        display: "table-cell",
-        verticalAlign: "middle"
+      width: "auto",
+      display: "table-cell",
+      verticalAlign: "middle"
     }
 
     return (
@@ -75,34 +78,55 @@ class ComponentList extends Component {
             const value = tasks[key];
             const selectItem = selected.includes(key);
 
-            return (
-              <ListItem key={index} className={selectItem ? 'select' : 'unselect'}>
-              
-                  <Checkbox
-                  value={index}
-                  checked = {selectItem} 
-                  onCheck = {() => {
-                    this.handleChahgeCheckbox(key);
-                  }}
-                  style = {verticalAlign}
-                />   
-                  <span className="checkbox-content" style={verticalAlign}>
-                  {value}
-                  </span>
-                  <FontIcon
-                  className = "far fa-edit edit"
-                  style = {verticalAlign}
-                  onClick = {()=>{
+            const leftHandler = (
+              <Checkbox
+                value={index}
+                checked={selectItem}
+                onCheck={() => this.handleChahgeCheckbox(key)}
+                
+              />
+            )
+
+            const rightHandler = (
+              <IconMenu 
+                style = {{
+                  height:"auto",
+                  width:"auto",
+                  margin: "0"
+                }}
+                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+                targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+                
+              >
+                <MenuItem primaryText="Edit"
+                  onClick={() => {
                     this.handleEditTask(value, key)
-                    this.setState({valueDialogFieldByDefault:value});
-                    this.setState({keyEditedTask: key});
-                  }}
-                  />
-                  <FontIcon
-                  className = "fas fa-times close"
-                  style = {verticalAlign}
-                  onClick = {() => !selectItem?this.handleRemove(key):false}
-                  />
+                    this.setState({ valueDialogFieldByDefault: value });
+                    this.setState({ keyEditedTask: key });
+                  }} />
+                <MenuItem
+                  primaryText="Delete"
+                  onClick={() => {
+                    !selectItem 
+                    ? this.props.onAlertConfirm(key)
+                    : false
+                  }
+                }
+                />
+              </IconMenu>
+            )
+
+            return (
+              <ListItem
+                key={index}
+                className={selectItem ? 'select' : 'unselect'}
+                leftIcon={leftHandler}
+                rightIcon={rightHandler}
+              >
+                <span className="checkbox-content">
+                  {value}
+                </span>
               </ListItem>
             );
           })}

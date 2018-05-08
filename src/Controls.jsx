@@ -7,6 +7,8 @@ import TextField from 'material-ui/TextField';
 
 import Dialogs from './material-ui-components/dialogs/';
 
+import Style from './css/controls.css';
+
 
 export default class Controls extends Component {
 
@@ -59,38 +61,5 @@ export default class Controls extends Component {
             </FloatingActionButton>
         </div>
     );
-
-    /*return (
-      <Toolbar>
-        
-        <ToolbarGroup firstChild={true} 
-          style={{
-          width:'100%',
-          justifyContent: 'space-between'
-      }}>
-        <MuiThemeProvider>
-            <TextField 
-            hintText="Add your task" 
-            style = {Style} 
-            onChange = {this.handleInput}
-            value = {value} //to bind input and state component
-            />
-        </MuiThemeProvider>
-          <ToolbarSeparator />
-            <FloatingActionButton 
-                variant="raised" 
-                color="primary" 
-                mini={true} 
-                style={{marginLeft:'10px'}}
-                className="add-button" 
-                onClick={(event) => {
-                  this.handlePress();
-                }} 
-            >
-                <ContentAdd />
-            </FloatingActionButton>
-        </ToolbarGroup>
-      </Toolbar>
-    );*/
   }
 }

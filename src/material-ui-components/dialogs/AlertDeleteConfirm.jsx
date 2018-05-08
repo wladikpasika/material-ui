@@ -1,0 +1,44 @@
+import React, {Component} from 'react';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+
+
+export default class AlertDeleteConfirm extends Component {
+  
+  render() {
+    const { open, handleAlert, allowDeletePermission } = this.props;
+
+    const actions = [
+        <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={() => {
+            //allowDeletePermission();
+            handleAlert();
+        }}
+      />,
+      <FlatButton
+        label="OK"
+        primary={true}
+        onClick={() => {
+            allowDeletePermission();
+            //handleAlert();
+        }}
+      />
+    ];
+
+    return (
+      <div>
+        <Dialog
+          actions={actions}
+          modal={false}
+          open={open}
+          onRequestClose={handleAlert}
+        >
+          "Are you sure?"
+        </Dialog>
+      </div>
+    );
+  }
+}

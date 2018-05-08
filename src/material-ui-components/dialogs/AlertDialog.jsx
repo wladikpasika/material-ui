@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-
-class AlertDialog extends React.Component {
+class AlertDialog extends Component {
   
-
   render() {
     const { message, open, handleAlert } = this.props;
 
@@ -14,7 +12,7 @@ class AlertDialog extends React.Component {
       <FlatButton
         label="OK"
         primary={true}
-        onClick={()=>handleAlert()}
+        onClick={handleAlert}
       />,
     ];
 

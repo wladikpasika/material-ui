@@ -1,0 +1,16 @@
+
+.controls {
+    margin:5px
+}
+.controls input{
+    border: 1px solid;
+}
+.add-button{
+    margin-left: 10px;
+}
+.control-buton{
+    margin-left: 5px;
+}
+.app-bar button {
+    display:none !important;
+}
