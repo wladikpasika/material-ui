@@ -40,7 +40,6 @@ class ComponentList extends PureComponent {
 
   handleChahgeCheckbox = (key) => {
     const { selected } = this.state;
-    console.log('lol');
 
     const newSelected = selected.includes(key)
       ? selected.filter(oldKey => oldKey !== key)
@@ -62,8 +61,10 @@ class ComponentList extends PureComponent {
   }
 
 
+
   render() {
-    const { tasks = {} } = this.props;
+    console.log(this.props);
+    const { tasks = {} } = this.props.tasks;
     const { selected } = this.state;
     const verticalAlign = {
       width: "auto",
@@ -74,9 +75,11 @@ class ComponentList extends PureComponent {
     return (
       <div className="list-item">
         <List>
-          {Object.keys(tasks).map((key, index) => {
+          {
+            Object.keys(tasks).map((key, index) => {
             const value = tasks[key];
             const selectItem = selected.includes(key);
+            console.log(value);
 
             const leftHandler = (
               <Checkbox
