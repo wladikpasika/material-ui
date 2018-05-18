@@ -1,4 +1,4 @@
-import { ADD_TODO, REMOVE_TODO, REMOVE_TODOS, EDIT_TODO  } from '../actions/actions';
+import { ADD_TODO, REMOVE_TODO, REMOVE_TODOS, EDIT_TODO, ADD_TODO_FROM_LOCAL_STORAGE  } from '../actions/actions';
 
 
 let keyIterator = 0;
@@ -7,7 +7,7 @@ const initialState = {
 }
 
 export function tasks(prevState = initialState, action) {
-  const { type = '', text = '', key = 0, newValue = '', keys = [] } = action;
+  const { type = '', text = '', key = 0, newValue = '', keys = [], tasks = {} } = action;
 
   switch (type) {
     case ADD_TODO: {
@@ -42,7 +42,10 @@ export function tasks(prevState = initialState, action) {
       delete newTasks[key];
       return {...prevState, tasks:newTasks };
     }
-
+    case ADD_TODO_FROM_LOCAL_STORAGE:{
+      const newTasks = {...tasks};
+        return {...prevState, tasks: newTasks};
+    }
     default: {
       return prevState;
     }

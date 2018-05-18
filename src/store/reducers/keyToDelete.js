@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { SET_KEY_TO_DELETE, REMOVE_KEY_TO_DELETE } from '../actions/actions';
 
 

@@ -25,19 +25,13 @@ import {
   closeDialogEdit,
   setKeyToDelete,
   removeKeyToDelete,
+  openAlertToConfirm,
+  closeAlertToConfirm,
+  addTodoFromLocalStorage,
 } from './store/actions/actions';
 
 
 class Root extends PureComponent {
-
-  state = {
-    dialogEdit: false,
-    alertConfirm: false,
-    valueDialogByDefault: '',
-    keyEditedTask: null,
-    taskTodelete: null
-  }
-  iterator = 0;
 
   handleAddItem = (value = '') => {
     this.props.onAddTask(value);
@@ -46,14 +40,16 @@ class Root extends PureComponent {
   handleEditItem = (key, newValue) => {
     this.props.onEdit(key,newValue);
   }
+
   handleRemoveItems = (keys) => {
     this.props.onRemoveTodos(keys);
   }
 
   handleRemoveItem = () => {
-    const { tasks, taskTodelete } = this.state;
-    this.props.onRemove(taskTodelete);
+    const { keyDeletedTask } = this.props;
+    this.props.onRemove(keyDeletedTask);
   }
+
   handleCloseDialogAdd = () => {
     this.props.onCloseDialogAdd();
   }
@@ -68,11 +64,11 @@ class Root extends PureComponent {
       this.handleAlert(messageAddAlert);
     }
   }
+
   handleEditTask = (value) => {
     const messageEditAlert = "Empty field, or You don`t edit task. If you want to delete task, put on \"Delete Icon\""
     if (value && value.trim()) {
-      console.log(this.props.taskTodelete);
-      this.handleEditItem(this.state.keyEditedTask, value);
+      this.handleEditItem(this.props.keyEditedTask, value);
     }
     else {
       this.handleAlert(messageEditAlert);
@@ -94,33 +90,50 @@ class Root extends PureComponent {
   };
 
   handleEditDialogCall = (value, key) => {
-    this.props.onEditOpen(value,"Edit Task");
+    this.props.onEditOpen(value,key,"Edit Task");
   };
 
   handleCloseDialogEdit = () => {
     this.props.onEditClose();
   };
 
-  handleAlertConfirm = (key) => {
+  handleAlertConfirm = (key) => { //if call this function, open confirm window, set key task for delete
     if (key) {
       this.props.onSetKeyDeletedTask(key);
+      this.props.onAlertConfirmOpen();
     }
-    else {
-      this.props.onRemoveKeyDeletedTask(key);
-    }
-    return this.setState({
-      alertConfirm: !this.state.alertConfirm
-    });
-  }
-  allowDeletePermission = () => {
+  };  
+
+  allowDeletePermission = () => { //if call this function, task delete and confirm window close
     this.handleRemoveItem();
-    this.handleAlertConfirm();
+    this.props.onAlertConfirmClose();
+    this.props.onRemoveKeyDeletedTask();
   }
 
+  componentDidMount() {
+    const cashedTasks = storageCheck();
+    console.log(cashedTasks);
+
+    if (cashedTasks) {
+      this.props.onSetTasksFromLocalStorage(cashedTasks);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.tasks !== this.props.tasks) {
+      handleStorage(this.props.tasks.tasks);
+    };
+  }
 
   render() {
-    const { alertConfirm, keyEditedTask } = this.state;
-    const { tasks, dialogAdd, valueDialogByDefault, alert, alertMessage, dialogEdit } = this.props;
+    const { 
+      tasks, 
+      dialogAdd, 
+      valueDialogByDefault, 
+      alert, 
+      alertMessage, 
+      dialogEdit, 
+      alertConfirm } = this.props;
 
     const { PromptAdd, PromptEdit, Alert, AlertConfirm } = Dialogs({
       dialogAdd,
@@ -172,7 +185,9 @@ const mapStatetoProps = state => (
     alertMessage: state.alert.message,
     valueDialogByDefault: state.dialogEdit.oldValue,
     dialogEdit: state.dialogEdit.status,
-    taskTodelete: state.keyTaskToDelete,
+    keyEditedTask: state.dialogEdit.key,
+    keyDeletedTask: state.keyTaskToDelete,
+    alertConfirm: state.alertConfirm,
   } 
 );
 
@@ -190,6 +205,9 @@ const mapDispathToProps = dispatch => (
     onEditClose: () => dispatch( closeDialogEdit() ),
     onSetKeyDeletedTask: (key) => dispatch( setKeyToDelete(key) ),
     onRemoveKeyDeletedTask: () => dispatch( removeKeyToDelete() ),
+    onAlertConfirmOpen: () => dispatch( openAlertToConfirm()),
+    onAlertConfirmClose: () => dispatch( closeAlertToConfirm()),
+    onSetTasksFromLocalStorage: (tasks) => dispatch( addTodoFromLocalStorage(tasks)),
   }
 );
   

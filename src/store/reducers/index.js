@@ -4,7 +4,8 @@ import { tasks } from './tasks';
 import { dialogAdd } from './dialogAdd';
 import { alert } from './alert';
 import { dialogEdit } from './dialogEdit';
-import { keyTaskToDelete } from './keyToDelete'
+import { keyTaskToDelete } from './keyToDelete';
+import { alertConfirm } from './confirmAlert';
 
 
 export const reducers = combineReducers({
@@ -13,4 +14,5 @@ export const reducers = combineReducers({
   alert,
   dialogEdit,
   keyTaskToDelete,
+  alertConfirm,
 });

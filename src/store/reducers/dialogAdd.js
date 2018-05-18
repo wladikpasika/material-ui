@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { CLOSE_DIALOG_ADD, OPEN_DIALOG_ADD } from '../actions/actions';
 
 
