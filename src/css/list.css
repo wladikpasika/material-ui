@@ -1,40 +1,8 @@
-.fa-times:before{color:red}
-.fa-edit:before {
-    content: "\f044";
-    margin:5px;
-    color: blueviolet;
-}
-.list-item ul li {
-    text-align: center,
-}
-
 .select {background: #ff000082 !important}
 .unselect:hover {background: #0037ff1f !important}
-.select .fas.fa-times.close {
-    display:none !important
-}
 
-.controls {
-    margin:5px
-}
-.controls input{
-    border: 1px solid;
-}
-.add-button{
-    margin-left: 10px;
-}
-.control-buton{
-    margin-left: 5px;
-}
-.list-btn-wrp {
+.list_btn_wrp {
     display: flex;
     justify-content: space-between;
     
-}
-.app-bar button {
-    display:none !important;
-}
-
-.checkbox-content{
-    font-size: 24px
 }

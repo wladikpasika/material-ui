@@ -8,6 +8,8 @@ import { keyTaskToDelete } from './keyToDelete';
 import { alertConfirm } from './confirmAlert';
 
 
+
+
 export const reducers = combineReducers({
   tasks,
   dialogAdd,

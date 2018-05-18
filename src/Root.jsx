@@ -28,7 +28,7 @@ import {
   openAlertToConfirm,
   closeAlertToConfirm,
   addTodoFromLocalStorage,
-} from './store/actions/actions';
+} from './store/actions/';
 
 
 class Root extends PureComponent {
@@ -112,8 +112,6 @@ class Root extends PureComponent {
 
   componentDidMount() {
     const cashedTasks = storageCheck();
-    console.log(cashedTasks);
-
     if (cashedTasks) {
       this.props.onSetTasksFromLocalStorage(cashedTasks);
     }

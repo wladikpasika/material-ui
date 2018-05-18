@@ -1,4 +1,4 @@
-import { OPEN_ALERT, CLOSE_ALERT } from '../actions/actions';
+import { OPEN_ALERT, CLOSE_ALERT } from '../actions/actionsTypes';
 
 export function alert( prevState = {status:false, message:''}, typeAction ) {
   const { type, message = '' } = typeAction; 

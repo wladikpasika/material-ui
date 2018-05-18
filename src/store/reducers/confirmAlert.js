@@ -1,4 +1,4 @@
-import { OPEN_ALERT_TO_CONFIRM, CLOSE_ALERT_TO_CONFIRM } from '../actions/actions';
+import { OPEN_ALERT_TO_CONFIRM, CLOSE_ALERT_TO_CONFIRM } from '../actions/actionsTypes';
 
 export function alertConfirm ( prevState = false, typeAction ) {
   const { type, message = '' } = typeAction; 

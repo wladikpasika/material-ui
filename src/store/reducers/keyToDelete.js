@@ -1,4 +1,4 @@
-import { SET_KEY_TO_DELETE, REMOVE_KEY_TO_DELETE } from '../actions/actions';
+import { SET_KEY_TO_DELETE, REMOVE_KEY_TO_DELETE } from '../actions/actionsTypes';
 
 
 export function keyTaskToDelete( prevState = null, typeAction ) {

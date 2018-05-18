@@ -1,4 +1,4 @@
-import { CLOSE_DIALOG_EDIT, OPEN_DIALOG_EDIT } from '../actions/actions';
+import { CLOSE_DIALOG_EDIT, OPEN_DIALOG_EDIT } from '../actions/actionsTypes';
 
 const initialState = {
     oldValue: '',

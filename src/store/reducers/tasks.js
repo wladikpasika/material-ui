@@ -1,6 +1,10 @@
-import { ADD_TODO, REMOVE_TODO, REMOVE_TODOS, EDIT_TODO, ADD_TODO_FROM_LOCAL_STORAGE  } from '../actions/actions';
-
-
+import { 
+  ADD_TODO, 
+  REMOVE_TODO, 
+  REMOVE_TODOS, 
+  EDIT_TODO, 
+  ADD_TODO_FROM_LOCAL_STORAGE  } from '../actions/actionsTypes';
+  
 let keyIterator = 0;
 const initialState = {
   tasks: {},
@@ -44,6 +48,13 @@ export function tasks(prevState = initialState, action) {
     }
     case ADD_TODO_FROM_LOCAL_STORAGE:{
       const newTasks = {...tasks};
+      const keyArray = Object.keys(newTasks);
+      keyIterator = 
+        keyArray.length
+        ?Math.max.apply(null, Object.keys(keyArray))+1
+        :null;
+        
+      console.log(keyIterator);
         return {...prevState, tasks: newTasks};
     }
     default: {

@@ -11,11 +11,12 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
-import listStyles from './css/list.css';
+import classes from './css/list.css';
+console.log(classes.list_btn_wrp);
 
 const ControlsButtons = (props) => {
   return (
-    <div className="list-btn-wrp">
+    <div>
       <RaisedButton
         label="Unselect" primary={true}
         onClick={props.onClear}
@@ -63,7 +64,6 @@ class ComponentList extends PureComponent {
 
 
   render() {
-    console.log(this.props);
     const { tasks = {} } = this.props.tasks;
     const { selected } = this.state;
     const verticalAlign = {
@@ -73,13 +73,12 @@ class ComponentList extends PureComponent {
     }
 
     return (
-      <div className="list-item">
+      <div>
         <List>
           {
             Object.keys(tasks).map((key, index) => {
             const value = tasks[key];
             const selectItem = selected.includes(key);
-            console.log(value);
 
             const leftHandler = (
               <Checkbox
@@ -123,7 +122,7 @@ class ComponentList extends PureComponent {
             return (
               <ListItem
                 key={index}
-                className={selectItem ? 'select' : 'unselect'}
+                className={ selectItem ? classes.select : classes.unselect }
                 leftIcon={leftHandler}
                 rightIcon={rightHandler}
               >
