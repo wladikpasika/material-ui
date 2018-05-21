@@ -48,8 +48,8 @@ export function tasks(prevState = {}, action) {
       const keyArray = Object.keys(newTasks);
       keyIterator = 
         keyArray.length
-        ?Math.max.apply(null, Object.keys(keyArray))+1
-        :null;     
+        ?Math.max.apply(null, keyArray) + 1
+        :null;   
         return newTasks;
     }
     default: {
