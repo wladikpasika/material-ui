@@ -63,7 +63,6 @@ class ComponentList extends PureComponent {
   render() {
     const { tasks = {} } = this.props;
     const { selected } = this.state;
-    console.log(tasks);
 
     return (
       <div>
@@ -101,6 +100,7 @@ class ComponentList extends PureComponent {
                     this.setState({ keyEditedTask: key });
                   }} />
                 <MenuItem
+                  disabled={selectItem}
                   primaryText="Delete"
                   onClick={() => {
                     !selectItem 

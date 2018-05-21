@@ -89,7 +89,6 @@ class Root extends PureComponent {
 
   handleAlertConfirm = (key) => { //if call this function, open confirm window, set key task for delete
     if (key) {
-      console.log(key);
       this.props.onAlertConfirmOpen(key);
     }
     else {
