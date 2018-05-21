@@ -4,6 +4,14 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
+import { orange500, blue500 } from 'material-ui/styles/colors';
+
+
+const styles={
+  error:{
+    color: orange500
+  }
+}
 
 export default class DialogComponent extends Component {
 
@@ -11,15 +19,10 @@ export default class DialogComponent extends Component {
     value: ''
   }
 
-  static defaultProps = {
-    defaultValue: ""
-  }
-
-  handleEditItem = () => {
-    this.props.handleCloseDialogEdit();
-    this.props.handleEditTask(this.state.value)
-    this.handleClearState()
-
+  handleAddItem = () => {
+    this.props.handleCloseDialogAdd();
+    this.props.handleAddTask(this.state.value);
+    this.handleClearState();
   }
 
   handleInputChange = (event) => {
@@ -31,16 +34,9 @@ export default class DialogComponent extends Component {
     return this.setState({ value: '' });
   }
 
-
-  componentWillReceiveProps(nextProps) {
-   if (nextProps.open && nextProps.defaultValue) {
-      this.setState({ value: nextProps.defaultValue });
-    }
-  }
-
   render() {
     const { value } = this.state;
-    const { open, defaultValue } = this.props;
+    const { open } = this.props;
    
     const actions = [
       <FlatButton
@@ -48,14 +44,15 @@ export default class DialogComponent extends Component {
         primary={true}
         onClick={() => {
           this.handleClearState();
-          this.props.handleCloseDialogEdit();
+          this.props.handleCloseDialogAdd();
         }}
       />,
       <FlatButton
         label="Submit"
         primary={true}
         keyboardFocused={false}
-        onClick={this.handleEditItem}
+        onClick={this.handleAddItem}
+        disabled={ !this.state.value.length }
       />
     ];
 
@@ -64,16 +61,18 @@ export default class DialogComponent extends Component {
         open={open}
         aria-labelledby="form-dialog-title"
         actions={actions}
-        title="Edit Your Task"
+        title="Add new Task"
         modal={false}
-        onRequestClose={this.props.handleCloseDialogEdit}
+        onRequestClose={this.props.handleCloseDialogAdd}
       >
         <TextField
           autoFocus
           hintText="Your Task"
-          value={value}
           fullWidth
           onChange={ this.handleInputChange }
+          value={ this.state.value }
+          errorText={ !this.state.value.length?"This field is required":false }
+          errorStyle={ styles.error }
         />
       </Dialog>
     )

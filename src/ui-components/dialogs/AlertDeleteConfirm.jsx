@@ -3,17 +3,27 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-class AlertDialog extends Component {
+
+export default class AlertDeleteConfirm extends Component {
   
   render() {
-    const { message, open, handleAlert } = this.props;
+    const { open, handleAlert, allowDeletePermission, deletedTask } = this.props;
 
     const actions = [
+        <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={() => {
+            handleAlert();
+        }}
+      />,
       <FlatButton
         label="OK"
         primary={true}
-        onClick={handleAlert}
-      />,
+        onClick={() => {
+            allowDeletePermission();
+        }}
+      />
     ];
 
     return (
@@ -24,11 +34,9 @@ class AlertDialog extends Component {
           open={open}
           onRequestClose={handleAlert}
         >
-          {message}
+        You delete "{ deletedTask }". Continue?
         </Dialog>
       </div>
     );
   }
 }
-
-export default AlertDialog;

@@ -1,4 +1,4 @@
-import { CLOSE_DIALOG_ADD, OPEN_DIALOG_ADD } from '../actions/actionsTypes';
+import { CLOSE_DIALOG_ADD, OPEN_DIALOG_ADD } from '../../actions/actionsTypes';
 
 
 export function dialogAdd( prevState = false, typeAction ) {

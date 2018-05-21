@@ -1,6 +1,6 @@
-import { OPEN_ALERT, CLOSE_ALERT } from '../actions/actionsTypes';
+import { OPEN_ALERT, CLOSE_ALERT } from '../../actions/actionsTypes';
 
-export function alert( prevState = {status:false, message:''}, typeAction ) {
+export function attentionAlert( prevState = {status:false, message:''}, typeAction ) {
   const { type, message = '' } = typeAction; 
   
   switch (type) {
@@ -8,7 +8,7 @@ export function alert( prevState = {status:false, message:''}, typeAction ) {
       return {status: true, message};
     }
     case CLOSE_ALERT: {
-        return {status:false, message}
+        return {status: false, essage}
       }
     default: {
       return prevState;

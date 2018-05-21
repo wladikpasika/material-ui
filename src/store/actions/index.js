@@ -1,11 +1,6 @@
 export {
-    setKeyToDelete,
-    removeKeyToDelete,
-} from './key';
-
-export {
     addTodo,
-    addTodoFromLocalStorage,
+    uploadTodoFromLocalStorage,
     removeTodo,
     removeTodos,
     editTodo,
@@ -16,11 +11,9 @@ export {
     openDialogAdd,
     openDialogEdit,
     closeDialogEdit,
-} from './dialogs';
+} from './ui/dialogs';
 
 export {
-    openAlert,
-    closeAlert,
     openAlertToConfirm,
-    closeAlertToConfirm
-} from './alerts'
+    closeAlertToConfirm,
+} from './ui/alerts'

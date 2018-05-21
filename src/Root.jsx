@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import List from './List';
 import Header from './Header';
 import Controls from './Controls';
-import Dialogs from './material-ui-components/dialogs/';
-import Test from './material-ui-components/dialogs/AlertDeleteConfirm';
+import Dialogs from './ui-components/dialogs/';
+import Test from './ui-components/dialogs/AlertDeleteConfirm';
 import handleStorage from './LocalStorage/storageUpdate';
 import storageCheck from './LocalStorage/storageCheck';
 import { 
@@ -27,7 +27,7 @@ import {
   removeKeyToDelete,
   openAlertToConfirm,
   closeAlertToConfirm,
-  addTodoFromLocalStorage,
+  uploadTodoFromLocalStorage,
 } from './store/actions/';
 
 
@@ -35,24 +35,24 @@ class Root extends PureComponent {
 
   handleAddItem = (value = '') => {
     this.props.onAddTask(value);
-  }
+  };
 
   handleEditItem = (key, newValue) => {
     this.props.onEdit(key,newValue);
-  }
+  };
 
   handleRemoveItems = (keys) => {
     this.props.onRemoveTodos(keys);
-  }
+  };
 
   handleRemoveItem = () => {
     const { keyDeletedTask } = this.props;
     this.props.onRemove(keyDeletedTask);
-  }
+  };
 
   handleCloseDialogAdd = () => {
     this.props.onCloseDialogAdd();
-  }
+  };
 
   handleAddTask = (value) => {
     const messageAddAlert = "Empty field, Put at least one character"
@@ -63,7 +63,7 @@ class Root extends PureComponent {
     else {
       this.handleAlert(messageAddAlert);
     }
-  }
+  };
 
   handleEditTask = (value) => {
     const messageEditAlert = "Empty field, or You don`t edit task. If you want to delete task, put on \"Delete Icon\""
@@ -73,17 +73,7 @@ class Root extends PureComponent {
     else {
       this.handleAlert(messageEditAlert);
     }
-  }
-
-  handleAlert = (message = "Undefined Error") => {
-
-    if(!this.state.alert){
-      this.props.onAlertOpen(message)
-    }
-    else{
-      this.props.onAlertClose()
-    } 
-  }
+  };
 
   handleAddDialogCall = () => {
     this.props.onOpenDialogAdd();
@@ -99,29 +89,31 @@ class Root extends PureComponent {
 
   handleAlertConfirm = (key) => { //if call this function, open confirm window, set key task for delete
     if (key) {
-      this.props.onSetKeyDeletedTask(key);
-      this.props.onAlertConfirmOpen();
+      console.log(key);
+      this.props.onAlertConfirmOpen(key);
+    }
+    else {
+      this.props.onAlertConfirmClose();
     }
   };  
 
   allowDeletePermission = () => { //if call this function, task delete and confirm window close
     this.handleRemoveItem();
     this.props.onAlertConfirmClose();
-    this.props.onRemoveKeyDeletedTask();
-  }
+  };
 
   componentDidMount() {
     const cashedTasks = storageCheck();
     if (cashedTasks) {
       this.props.onSetTasksFromLocalStorage(cashedTasks);
     }
-  }
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.tasks !== this.props.tasks) {
       handleStorage(this.props.tasks.tasks);
     };
-  }
+  };
 
   render() {
     const { 
@@ -131,22 +123,22 @@ class Root extends PureComponent {
       alert, 
       alertMessage, 
       dialogEdit, 
-      alertConfirm } = this.props;
+      alertConfirm,
+      keyDeletedTask,
+    } = this.props;
 
     const { PromptAdd, PromptEdit, Alert, AlertConfirm } = Dialogs({
       dialogAdd,
       dialogEdit,
-      alert,
       valueDialogByDefault,
-      alertMessage,
       handleCloseDialogAdd: this.handleCloseDialogAdd,
       handleCloseDialogEdit: this.handleCloseDialogEdit,
       handleAddTask: this.handleAddTask,
       handleEditTask: this.handleEditTask,
-      handleAlert: this.handleAlert,
       alertConfirm,
       handleAlertConfirm: this.handleAlertConfirm,
       allowDeletePermission: this.allowDeletePermission,
+      deletedTask: tasks.tasks[keyDeletedTask]
     });
   
     return (
@@ -172,20 +164,20 @@ class Root extends PureComponent {
         </Fragment>
       </MuiThemeProvider>
     );
-  }
+  };
 }
 
 const mapStatetoProps = state => (
   {
     tasks:state.tasks,
-    dialogAdd: state.dialogAdd,
-    alert: state.alert.status,
-    alertMessage: state.alert.message,
-    valueDialogByDefault: state.dialogEdit.oldValue,
-    dialogEdit: state.dialogEdit.status,
-    keyEditedTask: state.dialogEdit.key,
-    keyDeletedTask: state.keyTaskToDelete,
-    alertConfirm: state.alertConfirm,
+    dialogAdd: state.ui.dialogAdd,
+    alert: state.ui.attentionAlert.status,
+    alertMessage: state.ui.attentionAlert.message,
+    valueDialogByDefault: state.ui.dialogEdit.oldValue,
+    dialogEdit: state.ui.dialogEdit.status,
+    keyEditedTask: state.ui.dialogEdit.key,
+    keyDeletedTask: state.ui.confirmAlert.key,
+    alertConfirm: state.ui.confirmAlert.status,
   } 
 );
 
@@ -201,11 +193,9 @@ const mapDispathToProps = dispatch => (
     onAlertClose: () => dispatch( closeAlert() ),
     onEditOpen: (oldValue, message) => dispatch( openDialogEdit(oldValue, message) ),
     onEditClose: () => dispatch( closeDialogEdit() ),
-    onSetKeyDeletedTask: (key) => dispatch( setKeyToDelete(key) ),
-    onRemoveKeyDeletedTask: () => dispatch( removeKeyToDelete() ),
-    onAlertConfirmOpen: () => dispatch( openAlertToConfirm()),
+    onAlertConfirmOpen: (key) => dispatch( openAlertToConfirm(key)),
     onAlertConfirmClose: () => dispatch( closeAlertToConfirm()),
-    onSetTasksFromLocalStorage: (tasks) => dispatch( addTodoFromLocalStorage(tasks)),
+    onSetTasksFromLocalStorage: (tasks) => dispatch( uploadTodoFromLocalStorage(tasks)),
   }
 );
   

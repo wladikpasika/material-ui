@@ -12,11 +12,10 @@ import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import classes from './css/list.css';
-console.log(classes.list_btn_wrp);
 
 const ControlsButtons = (props) => {
   return (
-    <div>
+    <div className = { classes.list_btn_wrp }>
       <RaisedButton
         label="Unselect" primary={true}
         onClick={props.onClear}
@@ -37,7 +36,7 @@ class ComponentList extends PureComponent {
 
   handleRemove = (key) => {
     this.props.onRemove([key]);
-  }
+  };
 
   handleChahgeCheckbox = (key) => {
     const { selected } = this.state;
@@ -47,22 +46,20 @@ class ComponentList extends PureComponent {
       : [...selected, key];
 
     this.setState({ selected: newSelected });
-  }
+  };
 
   handleClearState = () => {
     const newSelected = [];
     this.setState({ selected: newSelected });
-  }
+  };
 
   handleEditTask = (value, key) => {
 
     if (value && value.trim()) {
       this.props.onEdit(value, key);
     }
-  }
-
-
-
+  };
+  
   render() {
     const { tasks = {} } = this.props.tasks;
     const { selected } = this.state;
