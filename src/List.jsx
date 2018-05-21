@@ -61,13 +61,9 @@ class ComponentList extends PureComponent {
   };
   
   render() {
-    const { tasks = {} } = this.props.tasks;
+    const { tasks = {} } = this.props;
     const { selected } = this.state;
-    const verticalAlign = {
-      width: "auto",
-      display: "table-cell",
-      verticalAlign: "middle"
-    }
+    console.log(tasks);
 
     return (
       <div>
@@ -76,7 +72,7 @@ class ComponentList extends PureComponent {
             Object.keys(tasks).map((key, index) => {
             const value = tasks[key];
             const selectItem = selected.includes(key);
-
+            
             const leftHandler = (
               <Checkbox
                 value={index}
@@ -85,7 +81,7 @@ class ComponentList extends PureComponent {
                 
               />
             )
-
+            
             const rightHandler = (
               <IconMenu 
                 style = {{

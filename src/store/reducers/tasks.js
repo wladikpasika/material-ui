@@ -6,45 +6,42 @@ import {
   UPLOAD_TODO_FROM_LOCAL_STORAGE  } from '../actions/actionsTypes';
   
 let keyIterator = 0;
-const initialState = {
-  tasks: {},
-}
 
-export function tasks(prevState = initialState, action) {
+
+export function tasks(prevState = {}, action) {
   const { type = '', text = '', key = 0, newValue = '', keys = [], tasks = {} } = action;
 
   switch (type) {
     case ADD_TODO: {
-      const newState = {...prevState};
+      const newTasks = {...prevState};
       keyIterator++;
-      newState.tasks[keyIterator] = text;
-      return newState;
+      newTasks[keyIterator] = text;
+      return newTasks;
     }
 
     case EDIT_TODO: {
-        const newTasks = {...prevState.tasks};
+        const newTasks = {...prevState};
         newTasks[key] = newValue;
-        return {...prevState, tasks:newTasks}
+        return newTasks; 
     }
 
     case REMOVE_TODO: {
-     
-      const newTasks = {...prevState.tasks};
+      const newTasks = {...prevState};
       delete newTasks[key];
-      return {...prevState, tasks: newTasks };
+      return newTasks;
     }
 
     case REMOVE_TODOS: {
-      const newTasks = {...prevState.tasks};
+      const newTasks = {...prevState};
       keys.forEach(key => {
         newTasks[key]
         ?delete newTasks[key]
         :false;
-        return {...prevState, tasks: newTasks };
+        return newTasks;
       });
 
       delete newTasks[key];
-      return {...prevState, tasks:newTasks };
+      return newTasks;
     }
     case  UPLOAD_TODO_FROM_LOCAL_STORAGE:{
       const newTasks = {...tasks};
@@ -53,7 +50,7 @@ export function tasks(prevState = initialState, action) {
         keyArray.length
         ?Math.max.apply(null, Object.keys(keyArray))+1
         :null;     
-        return {...prevState, tasks: newTasks};
+        return newTasks;
     }
     default: {
       return prevState;

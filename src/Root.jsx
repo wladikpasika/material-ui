@@ -111,7 +111,7 @@ class Root extends PureComponent {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.tasks !== this.props.tasks) {
-      handleStorage(this.props.tasks.tasks);
+      handleStorage(this.props.tasks);
     };
   };
 
@@ -138,7 +138,7 @@ class Root extends PureComponent {
       alertConfirm,
       handleAlertConfirm: this.handleAlertConfirm,
       allowDeletePermission: this.allowDeletePermission,
-      deletedTask: tasks.tasks[keyDeletedTask]
+      deletedTask: tasks[keyDeletedTask]
     });
   
     return (
@@ -152,7 +152,7 @@ class Root extends PureComponent {
             title="ToDo List"
           />
           <List
-            tasks={ tasks }
+            tasks={ this.props.tasks }
             onRemove={this.handleRemoveItems}
             onEdit={this.handleEditDialogCall}
             onAlert={this.handleAlert}
